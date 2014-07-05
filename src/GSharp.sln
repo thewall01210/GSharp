@@ -18,6 +18,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BD21C8
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GSharp.Test", "..\test\GSharp.Test\GSharp.Test.csproj", "{52C4BD34-C5FF-4496-808C-390922361FC3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CB23FFE1-20D3-4E71-815C-EF5F2C45D831}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GSharp.Graphics.Test", "..\test\GSharp.Graphics.Test\GSharp.Graphics.Test.csproj", "{7C913E93-875F-4991-B22C-5A0A9511371C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GSharp.Physics.Test", "..\test\GSharp.Physics.Test\GSharp.Physics.Test.csproj", "{9F58B6F3-6F74-4407-A62F-01C43E1A4DAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,8 +52,25 @@ Global
 		{C2043AD4-41C7-44CC-9453-6314F6EBC797}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2043AD4-41C7-44CC-9453-6314F6EBC797}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2043AD4-41C7-44CC-9453-6314F6EBC797}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52C4BD34-C5FF-4496-808C-390922361FC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52C4BD34-C5FF-4496-808C-390922361FC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52C4BD34-C5FF-4496-808C-390922361FC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52C4BD34-C5FF-4496-808C-390922361FC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C913E93-875F-4991-B22C-5A0A9511371C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C913E93-875F-4991-B22C-5A0A9511371C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C913E93-875F-4991-B22C-5A0A9511371C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C913E93-875F-4991-B22C-5A0A9511371C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F58B6F3-6F74-4407-A62F-01C43E1A4DAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F58B6F3-6F74-4407-A62F-01C43E1A4DAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F58B6F3-6F74-4407-A62F-01C43E1A4DAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F58B6F3-6F74-4407-A62F-01C43E1A4DAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{52C4BD34-C5FF-4496-808C-390922361FC3} = {CB23FFE1-20D3-4E71-815C-EF5F2C45D831}
+		{7C913E93-875F-4991-B22C-5A0A9511371C} = {CB23FFE1-20D3-4E71-815C-EF5F2C45D831}
+		{9F58B6F3-6F74-4407-A62F-01C43E1A4DAC} = {CB23FFE1-20D3-4E71-815C-EF5F2C45D831}
 	EndGlobalSection
 EndGlobal
