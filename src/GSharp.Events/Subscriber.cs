@@ -47,14 +47,20 @@ namespace GSharp.Events
       {
         while (true)
         {
-          bool more;
-          var type = socket.ReceiveString(SendReceiveOptions.DontWait, out more);
-          if (type == _type)
+          try
           {
-            if (more)
+            bool more;
+            var type = socket.ReceiveString(SendReceiveOptions.DontWait, out more);
+            if (type == _type)
             {
-              _callback.Invoke(socket.Receive(SendReceiveOptions.DontWait));
+              if (more)
+              {
+                _callback.Invoke(socket.Receive(SendReceiveOptions.DontWait));
+              }
             }
+          }
+          catch(AgainException againException)
+          {
           }
         }
       }
