@@ -45,18 +45,18 @@ namespace GSharp.Events
     {
       using (var socket = _context.CreateSubscriberSocket())
       {
-        /*while (true)
+        while (true)
         {
           bool more;
-          var type = socket.ReceiveString(true, out more);
+          var type = socket.ReceiveString(SendReceiveOptions.DontWait, out more);
           if (type == _type)
           {
             if (more)
             {
-              _callback.Invoke(socket.Receive());
+              _callback.Invoke(socket.Receive(SendReceiveOptions.DontWait));
             }
           }
-        }*/
+        }
       }
     }
   }

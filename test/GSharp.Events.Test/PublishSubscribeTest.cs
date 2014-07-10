@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,8 +46,9 @@ namespace GSharp.Events.Test
     [Test]
     public void CanConnect()
     {
-      var address = "tcp://127.0.0.1:9988";
-
+      // var address = "tcp://127.0.0.1:9988";
+      var address = string.Format("{0}://{1}:{2}", "tcp", IPAddress.IPv6Loopback, 9988);
+      
       var context = NetMQContext.Create();
       publisher = new PublisherStub(context, address);
       subscriber = new SubscriberStub(context, address);
