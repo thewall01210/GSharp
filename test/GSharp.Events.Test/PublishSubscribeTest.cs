@@ -12,31 +12,22 @@ using NetMQ;
 namespace GSharp.Events.Test
 {
   [TestFixture]
-  class PublishSubscribeTest
+  public class PublishSubscribeTest
   {
-    Client client;
+    Publisher publisher;
     Server server;
 
     [Test]
-    void CanConnect()
+    public void CanConnect()
     {
       var address = "tcp://127.0.0.1:9988";
 
-      var serverContext = NetMQContext.Create();
-      server = new Server(serverContext, "Test Server");
-      var serverToken = new CancellationTokenSource();
-      server.Start(serverToken.Token, address);
+      var pubContext = NetMQContext.Create();
+      publisher = new Publisher(pubContext, address);
+      
 
 
-      var clientContext = NetMQContext.Create();
-      client = new Client(clientContext, "Test Server");
-      var clientToken = new CancellationTokenSource();
-      client.Start(clientToken.Token, address);
-
-      clientToken.Cancel();
-      clientContext.Dispose();
-      serverToken.Cancel();
-      serverContext.Dispose();
+      Assert.True(true);
     }
   }
 }
