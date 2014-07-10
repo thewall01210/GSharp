@@ -26,7 +26,7 @@ namespace GSharp.Events
       using (var socket = _context.CreatePublisherSocket())
       {
         socket.Bind(_address);
-        socket.SendMore(type);
+        socket.Send(type);
       }
     }
 

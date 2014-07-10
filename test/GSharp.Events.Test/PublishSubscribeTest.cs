@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 using NUnit;
 using NUnit.Framework;
@@ -11,23 +12,52 @@ using NetMQ;
 
 namespace GSharp.Events.Test
 {
+  public class PublisherStub : Publisher
+  {
+    public PublisherStub(NetMQContext context, string address)
+      : base(context, address)
+    {
+    }
+  }
+
+  public class SubscriberStub : Subscriber
+  {
+    public byte[] Data { get; set; }
+
+    public SubscriberStub(NetMQContext context, string address)
+      : base(context, address)
+    {
+
+    }
+
+    public void Handle(byte[] data)
+    {
+      Data = data;
+    }
+  }
+
   [TestFixture]
   public class PublishSubscribeTest
   {
-    Publisher publisher;
-    Server server;
+    PublisherStub publisher;
+    SubscriberStub subscriber;
 
     [Test]
     public void CanConnect()
     {
       var address = "tcp://127.0.0.1:9988";
 
-      var pubContext = NetMQContext.Create();
-      publisher = new Publisher(pubContext, address);
-      
+      var context = NetMQContext.Create();
+      publisher = new PublisherStub(context, address);
+      subscriber = new SubscriberStub(context, address);
 
+      subscriber.AddListener("eventType", subscriber.Handle);
 
-      Assert.True(true);
+      publisher.FireEvent("eventType", new byte[] { 1, 0, 0, 0, 1 });
+
+      Thread.Sleep(10000);
+
+      Assert.AreEqual(5, subscriber.Data.Length);
     }
   }
 }

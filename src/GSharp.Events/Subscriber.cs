@@ -9,12 +9,13 @@ using NetMQ.zmq;
 
 namespace GSharp.Events
 {
-  public class Subscriber
+  public class Subscriber : IDisposable
   {
     private NetMQContext _context;
     private string _address;
-    public delegate void Callback(byte[] data);
-    public Callback _callback;
+    private string _type;
+    private Task Poller;
+    private Action<byte[]> _callback;
 
     public Subscriber(NetMQContext context, string address)
     {
@@ -22,13 +23,40 @@ namespace GSharp.Events
       _address = address;
     }
 
-    public void AddListener(string type, Callback callback)
+    public void AddListener(string type, Action<byte[]> callback)
     {
+      _type = type;
       _callback = callback;
       using (var socket = _context.CreateSubscriberSocket())
       {
         socket.Connect(_address);
         socket.Subscribe(type);
+      }
+      Poller = new Task(Poll);
+      Poller.Start();
+    }
+
+    public void Dispose()
+    {
+      Poller.Dispose();
+    }
+
+    private void Poll()
+    {
+      using (var socket = _context.CreateSubscriberSocket())
+      {
+        /*while (true)
+        {
+          bool more;
+          var type = socket.ReceiveString(true, out more);
+          if (type == _type)
+          {
+            if (more)
+            {
+              _callback.Invoke(socket.Receive());
+            }
+          }
+        }*/
       }
     }
   }
