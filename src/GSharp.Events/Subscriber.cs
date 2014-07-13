@@ -6,33 +6,33 @@ using System.Threading;
 using System.Threading.Tasks;
 using NetMQ;
 using NetMQ.zmq;
+using NetMQ.Sockets;
 
 namespace GSharp.Events
 {
   public class Subscriber : IDisposable
   {
-    private NetMQContext _context;
     private string _address;
+    private NetMQContext _context;
     private string _type;
+    private SubscriberSocket _socket;
     private Task Poller;
     private Action<byte[]> _callback;
 
     public Subscriber(NetMQContext context, string address)
     {
-      _context = context;
       _address = address;
+      _context = context;
+      _socket = _context.CreateSubscriberSocket();
+      _socket.Connect(_address);
+      Poller = new Task(Poll);
     }
 
     public void AddListener(string type, Action<byte[]> callback)
     {
       _type = type;
       _callback = callback;
-      using (var socket = _context.CreateSubscriberSocket())
-      {
-        socket.Connect(_address);
-        socket.Subscribe(type);
-      }
-      Poller = new Task(Poll);
+      _socket.Subscribe(_type);
       Poller.Start();
     }
 
@@ -41,27 +41,25 @@ namespace GSharp.Events
       Poller.Dispose();
     }
 
-    private void Poll()
+    private  void Poll()
     {
-      using (var socket = _context.CreateSubscriberSocket())
+      while (true)
       {
-        while (true)
+        try
         {
-          try
+          bool more;
+          // fail...
+          string type = _socket.ReceiveString(SendReceiveOptions.None, out more);
+          if (type == _type)
           {
-            bool more;
-            var type = socket.ReceiveString(SendReceiveOptions.DontWait, out more);
-            if (type == _type)
+            if (more)
             {
-              if (more)
-              {
-                _callback.Invoke(socket.Receive(SendReceiveOptions.DontWait));
-              }
+              _callback.Invoke(_socket.Receive(SendReceiveOptions.None));
             }
           }
-          catch(AgainException againException)
-          {
-          }
+        }
+        catch (AgainException againException)
+        {
         }
       }
     }

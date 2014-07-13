@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NetMQ;
 using NetMQ.zmq;
+using NetMQ.Sockets;
 
 namespace GSharp.Events
 {
@@ -14,30 +15,25 @@ namespace GSharp.Events
     private readonly NetMQContext _context;
 
     private string _address;
+    private PublisherSocket _socket;
 
     public Publisher(NetMQContext context, string address)
     {
       _context = context;
+      _socket = _context.CreatePublisherSocket();
       _address = address;
+      _socket.Bind(_address);
     }
 
     public void FireEvent(string type)
     {
-      using (var socket = _context.CreatePublisherSocket())
-      {
-        socket.Bind(_address);
-        socket.Send(type, true);
-      }
+      _socket.Send(type, true);
     }
 
     public void FireEvent(string type, byte[] data)
     {
-      using (var socket = _context.CreatePublisherSocket())
-      {
-        socket.Bind(_address);
-        socket.SendMore(type, true);
-        socket.Send(data, data.Length, true);
-      }
+      _socket.SendMore(type, true);
+      _socket.Send(data, data.Length, true);
     }
   }
 }

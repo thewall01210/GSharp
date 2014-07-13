@@ -49,16 +49,52 @@ namespace GSharp.Events.Test
       // var address = string.Format("{0}://{1}:{2}", "tcp", IPAddress.IPv6Loopback, 5556);
       var address = string.Format("{0}://{1}:{2}", "tcp", IPAddress.Loopback, 5556);
 
-      var pubContext = NetMQContext.Create();
-      var subContext = NetMQContext.Create();
-      publisher = new PublisherStub(pubContext, address);
-      subscriber = new SubscriberStub(subContext, address);
+      var context = NetMQContext.Create();
+      publisher = new PublisherStub(context, address);
+      subscriber = new SubscriberStub(context, address);
 
-      subscriber.AddListener("eventType", subscriber.Handle);
-      Thread.Sleep(100);
-      publisher.FireEvent("eventType", new byte[] { 1, 0, 0, 0, 1 });
+      subscriber.AddListener("a", subscriber.Handle);
+      Thread.Sleep(1000);
+      publisher.FireEvent("a", new byte[] { 0 });
 
+      Thread.Sleep(1000);
       Assert.NotNull(subscriber.Data);
+    }
+    
+    [Test]
+    public void TopicPubSub()
+    {
+      using (NetMQContext contex = NetMQContext.Create())
+      {
+        using (var pub = contex.CreatePublisherSocket())
+        {
+          pub.Bind("tcp://127.0.0.1:5002");
+
+          using (var sub = contex.CreateSubscriberSocket())
+          {
+            sub.Connect("tcp://127.0.0.1:5002");
+            sub.Subscribe("A");
+
+            // let the subscrbier connect to the publisher before sending a message
+            Thread.Sleep(500);
+
+            pub.SendMore("A");
+            pub.Send("Hello");
+
+            bool more;
+
+            string m = sub.ReceiveString(out more);
+
+            Assert.AreEqual("A", m);
+            Assert.IsTrue(more);
+
+            string m2 = sub.ReceiveString(out more);
+
+            Assert.AreEqual("Hello", m2);
+            Assert.False(more);
+          }
+        }
+      }
     }
   }
 }
