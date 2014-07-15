@@ -25,7 +25,6 @@ namespace GSharp.Events
       _context = context;
       _socket = _context.CreateSubscriberSocket();
       _socket.Connect(_address);
-      Poller = new Task(Poll);
     }
 
     public void AddListener(string type, Action<byte[]> callback)
@@ -33,11 +32,14 @@ namespace GSharp.Events
       _type = type;
       _callback = callback;
       _socket.Subscribe(_type);
+
+      Poller = new Task(Poll);
       Poller.Start();
     }
 
     public void Dispose()
     {
+      // If this does not stop the Task, then I am mistaken...
       Poller.Dispose();
     }
 
@@ -48,9 +50,7 @@ namespace GSharp.Events
         try
         {
           bool more;
-          // fail...
-          string type = _socket.ReceiveString(SendReceiveOptions.None, out more);
-          if (type == _type)
+          if (_socket.ReceiveString(SendReceiveOptions.None, out more) == _type)
           {
             if (more)
             {

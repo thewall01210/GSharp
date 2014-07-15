@@ -13,70 +13,62 @@ using NetMQ;
 
 namespace GSharp.Events.Test
 {
-  public class PublisherStub : Publisher
-  {
-    public PublisherStub(NetMQContext context, string address)
-      : base(context, address)
-    {
-    }
-  }
-
-  public class SubscriberStub : Subscriber
-  {
-    public byte[] Data { get; set; }
-
-    public SubscriberStub(NetMQContext context, string address)
-      : base(context, address)
-    {
-
-    }
-
-    public void Handle(byte[] data)
-    {
-      Data = data;
-    }
-  }
-
   [TestFixture]
   public class PublishSubscribeTest
   {
-    PublisherStub publisher;
-    SubscriberStub subscriber;
+    PublisherStub _publisher;
+    SubscriberStub _subscriber;
 
     [Test]
-    public void CanConnect()
+    public void DataNotNullWithSameContext()
     {
-      // var address = string.Format("{0}://{1}:{2}", "tcp", IPAddress.IPv6Loopback, 5556);
       var address = string.Format("{0}://{1}:{2}", "tcp", IPAddress.Loopback, 5556);
-
       var context = NetMQContext.Create();
-      publisher = new PublisherStub(context, address);
-      subscriber = new SubscriberStub(context, address);
+      _publisher = new PublisherStub(context, address);
+      _subscriber = new SubscriberStub(context, address);
 
-      subscriber.AddListener("a", subscriber.Handle);
-      Thread.Sleep(1000);
-      publisher.FireEvent("a", new byte[] { 0 });
+      _subscriber.AddListener("a", _subscriber.SetData);
+      Thread.Sleep(100);
+      _publisher.FireEvent("a", new byte[] { 0 });
 
-      Thread.Sleep(1000);
-      Assert.NotNull(subscriber.Data);
+      Thread.Sleep(100);
+      Assert.NotNull(_subscriber.Data);
+    }
+
+    [Test]
+    public void DataNotNullWithDifferentContexts()
+    {
+      var address = string.Format("{0}://{1}:{2}", "tcp", IPAddress.Loopback, 5557);
+      var context1 = NetMQContext.Create();
+      var context2 = NetMQContext.Create();
+      _publisher = new PublisherStub(context1, address);
+      _subscriber = new SubscriberStub(context2, address);
+
+      _subscriber.AddListener("a", _subscriber.SetData);
+      Thread.Sleep(100);
+      _publisher.FireEvent("a", new byte[] { 0 });
+
+      Thread.Sleep(100);
+      Assert.NotNull(_subscriber.Data);
     }
     
     [Test]
     public void TopicPubSub()
     {
+      var address = string.Format("{0}://{1}:{2}", "tcp", IPAddress.Loopback, 5558);
       using (NetMQContext contex = NetMQContext.Create())
       {
         using (var pub = contex.CreatePublisherSocket())
         {
-          pub.Bind("tcp://127.0.0.1:5002");
+          pub.Bind(address);
 
           using (var sub = contex.CreateSubscriberSocket())
           {
-            sub.Connect("tcp://127.0.0.1:5002");
+            sub.Connect(address);
             sub.Subscribe("A");
 
-            // let the subscrbier connect to the publisher before sending a message
-            Thread.Sleep(500);
+            // let the subscriber connect to the publisher before sending a message
+            Thread.Sleep(100);
 
             pub.SendMore("A");
             pub.Send("Hello");
