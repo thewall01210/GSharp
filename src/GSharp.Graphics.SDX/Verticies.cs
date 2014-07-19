@@ -1,13 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SlimDX;
 
 namespace GSharp.Graphics.SDX
 {
-  public class Verticies
+  public class Verticies : IDisposable
   {
+    private const int Vector3Size = 12;// sizeof(Vector3) is unsafe
 
+    public Verticies(Vector3[] vertices)
+    {
+      Vertices = vertices;
+      BufferSize = Vertices.Length * Vector3Size;
+      DataStream = new DataStream(Vertices, true, true);
+      DataStream.Position = 0;
+    }
+
+    public Vector3[] Vertices { get; private set; }
+
+    public int BufferSize { get; private set; }
+
+    public DataStream DataStream { get; private set; }
+
+    public void Dispose()
+    {
+      DataStream.Close();
+    }
   }
 }
