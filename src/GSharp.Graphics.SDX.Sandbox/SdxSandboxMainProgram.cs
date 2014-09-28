@@ -45,10 +45,27 @@ namespace GSharp.Graphics.SDX.Sandbox
       // load and compile the vertex shader
       var shaderHelper = new ShaderHelper();
       ShaderSignature inputSignature;
-      var vertexShaderLoader = new ShaderFileLoader("Shaders/PassThrough.fx", "VShader", "vs_4_0", ShaderFlags.None, EffectFlags.None);
-      var pixelShaderLoader = new ShaderFileLoader("Shaders/PassThrough.fx", "PShader", "ps_4_0", ShaderFlags.None, EffectFlags.None);
-      var vertexShader = shaderHelper.CompileAndBuildVertexShader(device, vertexShaderLoader, out inputSignature);
-      var pixelShader = shaderHelper.CompileAndBuildPixelShader(device, pixelShaderLoader);
+
+      var vertexShaderLoader =
+        new ShaderFileLoader(
+          "Shaders/PassThrough.fx",
+          "VShader",
+          "vs_4_0",
+          ShaderFlags.None,
+          EffectFlags.None);
+
+      var pixelShaderLoader =
+        new ShaderFileLoader(
+          "Shaders/PassThrough.fx",
+          "PShader",
+          "ps_4_0",
+          ShaderFlags.None,
+          EffectFlags.None);
+
+      var vertexShader =
+        shaderHelper.CompileAndBuildVertexShader(device, vertexShaderLoader, out inputSignature);
+      var pixelShader =
+        shaderHelper.CompileAndBuildPixelShader(device, pixelShaderLoader);
 
       var vertices = new Verticies(
         new[]
@@ -61,7 +78,16 @@ namespace GSharp.Graphics.SDX.Sandbox
       // create the vertex layout and buffer
       var elements = new[] { new InputElement("POSITION", 0, Format.R32G32B32_Float, 0) };
       var layout = new InputLayout(device, inputSignature, elements);
-      var vertexBuffer = new Buffer(device, vertices.DataStream, vertices.BufferSize, ResourceUsage.Default, BindFlags.VertexBuffer, CpuAccessFlags.None, ResourceOptionFlags.None, 0);
+      var vertexBuffer =
+        new Buffer(
+          device,
+          vertices.DataStream,
+          vertices.BufferSize,
+          ResourceUsage.Default,
+          BindFlags.VertexBuffer,
+          CpuAccessFlags.None,
+          ResourceOptionFlags.None,
+          0);
 
       // configure the Input Assembler portion of the pipeline with the vertex data
       context.InputAssembler.InputLayout = layout;
@@ -105,8 +131,8 @@ namespace GSharp.Graphics.SDX.Sandbox
 
       MessagePump.Run(form, () =>
       {
-        // clear the render target to a soothing blue
-        context.ClearRenderTargetView(renderTarget, new Color4(0.5f, 0.5f, 1.0f));
+        // clear the render target to grey
+        context.ClearRenderTargetView(renderTarget, new Color4(0.1f, 0.1f, 0.1f));
 
         // draw the triangle
         context.Draw(3, 0);

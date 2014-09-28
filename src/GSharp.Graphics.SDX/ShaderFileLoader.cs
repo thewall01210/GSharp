@@ -25,7 +25,12 @@ namespace GSharp.Graphics.SDX
 
     public ShaderBytecode LoadByteCode()
     {
-      return ShaderBytecode.CompileFromFile(FileName, EntryPoint, Profile, ShaderFlags, EffectFlags);
+      return ShaderBytecode.CompileFromFile(
+        FileName,
+        EntryPoint,
+        Profile,
+        ShaderFlags,
+        EffectFlags);
     }
   }
 }
