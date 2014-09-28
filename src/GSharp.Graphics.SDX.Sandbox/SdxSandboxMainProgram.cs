@@ -74,13 +74,21 @@ namespace GSharp.Graphics.SDX.Sandbox
 
       // prevent DXGI handling of alt+enter, which doesn't work properly with Winforms
       using (var factory = swapChain.GetParent<Factory>())
+      {
         factory.SetWindowAssociation(form.Handle, WindowAssociationFlags.IgnoreAltEnter);
+      }
 
       // handle alt+enter ourselves
       form.KeyDown += (o, e) =>
       {
         if (e.Alt && e.KeyCode == Keys.Enter)
           swapChain.IsFullScreen = !swapChain.IsFullScreen;
+
+        // closes the graphics window
+        if (e.KeyCode == Keys.Escape)
+        {
+          form.Close();
+        }
       };
 
       // handle form size changes
