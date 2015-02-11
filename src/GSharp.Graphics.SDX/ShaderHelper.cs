@@ -3,9 +3,9 @@ using SlimDX.Direct3D11;
 
 namespace GSharp.Graphics.SDX
 {
-  public class ShaderHelper
+  public static class ShaderHelper
   {
-    public PixelShader CompileAndBuildPixelShader(Device device, IShaderLoader loader)
+    public static PixelShader CompileAndBuildPixelShader(Device device, IShaderLoader loader)
     {
       using (var byteCode = loader.LoadByteCode())
       {
@@ -13,7 +13,7 @@ namespace GSharp.Graphics.SDX
       }
     }
 
-    public VertexShader CompileAndBuildVertexShader(Device device, IShaderLoader loader, out ShaderSignature signature)
+    public static VertexShader CompileAndBuildVertexShader(Device device, IShaderLoader loader, out ShaderSignature signature)
     {
       using (var byteCode = loader.LoadByteCode())
       {

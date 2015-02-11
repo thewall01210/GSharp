@@ -31,7 +31,7 @@ namespace GSharp.Graphics.SDX.Sandbox
 
       Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.None, description, out device, out swapChain);
 
-      // create a view of our render target, which is the backbuffer of the swap chain we just created
+      // create a view of our render target, which is the back-buffer of the swap chain we just created
       RenderTargetView renderTarget;
       using (var resource = Resource.FromSwapChain<Texture2D>(swapChain, 0))
         renderTarget = new RenderTargetView(device, resource);
@@ -43,7 +43,6 @@ namespace GSharp.Graphics.SDX.Sandbox
       context.Rasterizer.SetViewports(viewport);
 
       // load and compile the vertex shader
-      var shaderHelper = new ShaderHelper();
       ShaderSignature inputSignature;
 
       var vertexShaderLoader =
@@ -63,20 +62,26 @@ namespace GSharp.Graphics.SDX.Sandbox
           EffectFlags.None);
 
       var vertexShader =
-        shaderHelper.CompileAndBuildVertexShader(device, vertexShaderLoader, out inputSignature);
+        ShaderHelper.CompileAndBuildVertexShader(device, vertexShaderLoader, out inputSignature);
       var pixelShader =
-        shaderHelper.CompileAndBuildPixelShader(device, pixelShaderLoader);
+        ShaderHelper.CompileAndBuildPixelShader(device, pixelShaderLoader);
 
       var vertices = new Verticies(
         new[]
         {
-          new Vector3(0.0f, 0.5f, 0.5f),
-          new Vector3(0.5f, -0.5f, 0.5f),
-          new Vector3(-0.5f, -0.5f, 0.5f)
+          new Vector3(0.5f, 0.5f, 1.0f),
+          new Vector3(-0.5f, -0.5f, 1.0f),
+          new Vector3(-0.5f, 0.5f, 1.0f),
+
+          new Vector3(0.5f, 0.5f, 1.0f),
+          new Vector3(0.5f, -0.5f, 1.0f),
+          new Vector3(-0.5f, -0.5f, 1.0f)
         });
-      
+
       // create the vertex layout and buffer
-      var elements = new[] { new InputElement("POSITION", 0, Format.R32G32B32_Float, 0) };
+      var elements = new[] { new InputElement("INPUT", 0, Format.R32G32B32_Float, 0) };
+      var color = new Vector3(0.0f, 0.0f, 0.0f);
+
       var layout = new InputLayout(device, inputSignature, elements);
       var vertexBuffer =
         new Buffer(
@@ -135,7 +140,7 @@ namespace GSharp.Graphics.SDX.Sandbox
         context.ClearRenderTargetView(renderTarget, new Color4(0.1f, 0.1f, 0.1f));
 
         // draw the triangle
-        context.Draw(3, 0);
+        context.Draw(vertices.BufferSize, 0);
         swapChain.Present(0, PresentFlags.None);
       });
 
