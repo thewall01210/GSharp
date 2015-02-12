@@ -5,7 +5,7 @@ namespace GSharp.Graphics.SDX
 {
   public class Verticies : IDisposable
   {
-    private const int Vector3Size = 12; // SUBSTITUE  "sizeof(Vector3)" would need to be marked as unsafe
+    public static const int Vector3Size = 12; // SUBSTITUE  "sizeof(Vector3)" would need to be marked as unsafe
 
     public Verticies(Vector3[] vertices)
     {

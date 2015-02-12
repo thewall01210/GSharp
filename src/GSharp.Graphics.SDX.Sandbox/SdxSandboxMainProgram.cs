@@ -99,7 +99,7 @@ namespace GSharp.Graphics.SDX.Sandbox
       // configure the Input Assembler portion of the pipeline with the vertex data
       context.InputAssembler.InputLayout = layout;
       context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
-      context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(vertexBuffer, 12, 0));
+      context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(vertexBuffer, Verticies.Vector3Size, 0));
 
       // set the shaders
       context.VertexShader.Set(vertexShader);
