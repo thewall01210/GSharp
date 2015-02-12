@@ -96,10 +96,16 @@ namespace GSharp.Graphics.SDX.Sandbox
           ResourceOptionFlags.None,
           0);
 
+      var vertexBufferBindings = new VertexBufferBinding[]
+      {
+        new VertexBufferBinding(vertexBuffer, Verticies.Vector3Size, 0)
+      };
+
       // configure the Input Assembler portion of the pipeline with the vertex data
       context.InputAssembler.InputLayout = layout;
       context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
-      context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(vertexBuffer, Verticies.Vector3Size, 0));
+      context.InputAssembler.SetVertexBuffers(0, vertexBufferBindings);
+
 
       // set the shaders
       context.VertexShader.Set(vertexShader);
