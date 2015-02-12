@@ -34,7 +34,9 @@ namespace GSharp.Graphics.SDX.Sandbox
       // create a view of our render target, which is the back-buffer of the swap chain we just created
       RenderTargetView renderTarget;
       using (var resource = Resource.FromSwapChain<Texture2D>(swapChain, 0))
+      {
         renderTarget = new RenderTargetView(device, resource);
+      }
 
       // setting a viewport is required if you want to actually see anything
       var context = device.ImmediateContext;
@@ -104,14 +106,15 @@ namespace GSharp.Graphics.SDX.Sandbox
       context.PixelShader.Set(pixelShader);
 
       // prevent DXGI handling of alt+enter, which doesn't work properly with Winforms
+      // full screen below in "form.KeyDown"
       using (var factory = swapChain.GetParent<Factory>())
       {
         factory.SetWindowAssociation(form.Handle, WindowAssociationFlags.IgnoreAltEnter);
       }
 
-      // handle alt+enter ourselves
       form.KeyDown += (o, e) =>
       {
+        // full screen
         if (e.Alt && e.KeyCode == Keys.Enter)
           swapChain.IsFullScreen = !swapChain.IsFullScreen;
 
@@ -129,7 +132,9 @@ namespace GSharp.Graphics.SDX.Sandbox
 
         swapChain.ResizeBuffers(2, 0, 0, Format.R8G8B8A8_UNorm, SwapChainFlags.AllowModeSwitch);
         using (var resource = Resource.FromSwapChain<Texture2D>(swapChain, 0))
+        {
           renderTarget = new RenderTargetView(device, resource);
+        }
 
         context.OutputMerger.SetTargets(renderTarget);
       };
