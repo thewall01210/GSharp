@@ -1,15 +1,20 @@
 ﻿
 struct VShader_Input
 {
-  float4 color;
+  float4 position : POSITION;
 };
 
-float4 VShader(VShader_Input input : INPUT) : SV_POSITION
+struct PShader_Input
 {
-	return input.color;
+  float4 color : COLOR;
+};
+
+float4 VShader(VShader_Input input : VINPUT) : SV_POSITION
+{
+	return input.position;
 }
 
-float4 PShader(float4 color : SV_POSITION) : SV_Target
+float4 PShader(PShader_Input input) : SV_Target
 {
-	return float4(color[0], color[1], color[2], 1.0f);
+	return float4(input.color[0], input.color[1], input.color[2], 1.0f);
 }

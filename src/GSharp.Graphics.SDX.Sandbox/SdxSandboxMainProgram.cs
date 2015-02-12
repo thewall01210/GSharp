@@ -71,22 +71,24 @@ namespace GSharp.Graphics.SDX.Sandbox
       var vertices = new Verticies(
         new[]
         {
-          new Vector3(0.5f, 0.5f, 1.0f),
-          new Vector3(-0.5f, -0.5f, 1.0f),
-          new Vector3(-0.5f, 0.5f, 1.0f),
+          new Vector3(1.0f, 1.0f, 1.0f),
+          new Vector3(-1.0f, -1.0f, 1.0f),
+          new Vector3(-1.0f, 1.0f, 1.0f),
 
-          new Vector3(0.5f, 0.5f, 1.0f),
-          new Vector3(0.5f, -0.5f, 1.0f),
-          new Vector3(-0.5f, -0.5f, 1.0f)
+          new Vector3(1.0f, 1.0f, 1.0f),
+          new Vector3(1.0f, -1.0f, 1.0f),
+          new Vector3(-1.0f, -1.0f, 1.0f)
         });
 
       // create the vertex layout and buffer
-      var elements = new[] { new InputElement("INPUT", 0, Format.R32G32B32_Float, 0) };
-      var color = new Vector3(0.0f, 0.0f, 0.0f);
+      var elements = new []
+      {
+        new InputElement("VINPUT", 0, Format.R32G32B32_Float, 0)
+      };
 
-      var layout = new InputLayout(device, inputSignature, elements);
-      var vertexBuffer =
-        new Buffer(
+      var inputLayout = new InputLayout(device, inputSignature, elements);
+
+      var vertexBuffer = new Buffer(
           device,
           vertices.DataStream,
           vertices.BufferSize,
@@ -95,6 +97,7 @@ namespace GSharp.Graphics.SDX.Sandbox
           CpuAccessFlags.None,
           ResourceOptionFlags.None,
           0);
+      
 
       var vertexBufferBindings = new VertexBufferBinding[]
       {
@@ -102,7 +105,7 @@ namespace GSharp.Graphics.SDX.Sandbox
       };
 
       // configure the Input Assembler portion of the pipeline with the vertex data
-      context.InputAssembler.InputLayout = layout;
+      context.InputAssembler.InputLayout = inputLayout;
       context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
       context.InputAssembler.SetVertexBuffers(0, vertexBufferBindings);
 
@@ -159,7 +162,7 @@ namespace GSharp.Graphics.SDX.Sandbox
       // anything we missed will show up in the debug output
       vertices.Dispose();
       vertexBuffer.Dispose();
-      layout.Dispose();
+      inputLayout.Dispose();
       inputSignature.Dispose();
       vertexShader.Dispose();
       pixelShader.Dispose();
