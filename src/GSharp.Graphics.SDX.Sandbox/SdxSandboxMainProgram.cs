@@ -74,26 +74,13 @@ namespace GSharp.Graphics.SDX.Sandbox
       var model = new Model(
         new[]
           {
-            new Vector3(0.1f, 0.1f, 0.1f),
-            new Vector3(-0.1f, -0.1f, 0.1f),
-            new Vector3(-0.1f, 0.1f, 0.1f),
-
-            new Vector3(0.1f, 0.1f, 0.1f),
-            new Vector3(0.1f, -0.1f, 0.1f),
-            new Vector3(-0.1f, -0.1f, 0.1f)
-          }
-        );
-
-      model.AddColors(
-        new[]
+            new Vector3(0.1f, 0.1f, 0.1f), new Vector3(-0.1f, -0.1f, 0.1f), new Vector3(-0.1f, 0.1f, 0.1f),
+            new Vector3(0.1f, 0.1f, 0.1f), new Vector3(0.1f, -0.1f, 0.1f), new Vector3(-0.1f, -0.1f, 0.1f)
+          },
+          new[]
           {
-            new Vector3(1.0f, 1.0f, 1.0f),
-            new Vector3(1.0f, 1.0f, 1.0f),
-            new Vector3(1.0f, 1.0f, 1.0f),
-
-            new Vector3(1.0f, 1.0f, 1.0f),
-            new Vector3(1.0f, 1.0f, 1.0f),
-            new Vector3(1.0f, 1.0f, 1.0f)
+            new Vector3(1.0f, 1.0f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f),
+            new Vector3(1.0f, 1.0f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f)
           }
         );
 
