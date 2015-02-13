@@ -18,6 +18,7 @@ namespace GSharp.Graphics.SDX.Sandbox
       SwapChain swapChain;
 
       var form = new RenderForm("Sandbox");
+
       var description = new SwapChainDescription()
       {
         BufferCount = 2,
@@ -71,16 +72,18 @@ namespace GSharp.Graphics.SDX.Sandbox
       var pixelShader =
         ShaderHelper.CompileAndBuildPixelShader(device, pixelShaderLoader);
 
+      var cornFlowerBlue = new Vector3(0.3f, 0.5f, 0.7f); // <3 JP for life <3
+
       var model = new Model(
         new[]
           {
-            new Vector3(0.1f, 0.1f, 0.1f), new Vector3(-0.1f, -0.1f, 0.1f), new Vector3(-0.1f, 0.1f, 0.1f),
-            new Vector3(0.1f, 0.1f, 0.1f), new Vector3(0.1f, -0.1f, 0.1f), new Vector3(-0.1f, -0.1f, 0.1f)
+            new Vector3(0.1f, 0.1f, 0.1f), new Vector3(-0.1f, -0.1f, 0.1f), new Vector3(-0.1f,  0.1f, 0.1f),
+            new Vector3(0.1f, 0.1f, 0.1f), new Vector3( 0.1f, -0.1f, 0.1f), new Vector3(-0.1f, -0.1f, 0.1f)
           },
           new[]
           {
-            new Vector3(1.0f, 1.0f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f),
-            new Vector3(1.0f, 1.0f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f)
+            cornFlowerBlue, cornFlowerBlue, cornFlowerBlue,
+            cornFlowerBlue, cornFlowerBlue, cornFlowerBlue
           }
         );
 
@@ -113,7 +116,6 @@ namespace GSharp.Graphics.SDX.Sandbox
       context.InputAssembler.InputLayout = inputLayout;
       context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
       context.InputAssembler.SetVertexBuffers(0, vertexBufferBindings);
-
 
       // set the shaders
       context.VertexShader.Set(vertexShader);
