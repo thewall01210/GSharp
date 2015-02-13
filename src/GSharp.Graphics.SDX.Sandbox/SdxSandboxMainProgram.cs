@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using GSharp.Content;
 using SlimDX;
 using SlimDX.D3DCompiler;
 using SlimDX.Direct3D11;
@@ -30,6 +31,8 @@ namespace GSharp.Graphics.SDX.Sandbox
       };
 
       Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.None, description, out device, out swapChain);
+
+      // var squareTexture = ContentLoader.GetTexture(device, "box.bmp");
 
       // create a view of our render target, which is the back-buffer of the swap chain we just created
       RenderTargetView renderTarget;
@@ -71,19 +74,29 @@ namespace GSharp.Graphics.SDX.Sandbox
       var vertices = new Verticies(
         new[]
         {
-          new Vector3(1.0f, 1.0f, 1.0f),
-          new Vector3(-1.0f, -1.0f, 1.0f),
-          new Vector3(-1.0f, 1.0f, 1.0f),
+          new Vector3(0.1f, 0.1f, 0.1f),
+          new Vector3(-0.1f, -0.1f, 0.1f),
+          new Vector3(-0.1f, 0.1f, 0.1f),
 
+          new Vector3(0.1f, 0.1f, 0.1f),
+          new Vector3(0.1f, -0.1f, 0.1f),
+          new Vector3(-0.1f, -0.1f, 0.1f),
+          
+          // colors
           new Vector3(1.0f, 1.0f, 1.0f),
-          new Vector3(1.0f, -1.0f, 1.0f),
-          new Vector3(-1.0f, -1.0f, 1.0f)
+          new Vector3(1.0f, 1.0f, 1.0f),
+          new Vector3(1.0f, 1.0f, 1.0f),
+          
+          new Vector3(1.0f, 1.0f, 1.0f),
+          new Vector3(1.0f, 1.0f, 1.0f),
+          new Vector3(1.0f, 1.0f, 1.0f)
         });
 
       // create the vertex layout and buffer
       var elements = new []
       {
-        new InputElement("VINPUT", 0, Format.R32G32B32_Float, 0)
+        new InputElement("POSITION", 0, Format.R32G32B32_Float, 0),
+        new InputElement("COLOR", 0, Format.R32G32B32_Float, 12 * 6, 0)
       };
 
       var inputLayout = new InputLayout(device, inputSignature, elements);
@@ -151,7 +164,7 @@ namespace GSharp.Graphics.SDX.Sandbox
       MessagePump.Run(form, () =>
       {
         // clear the render target to grey
-        context.ClearRenderTargetView(renderTarget, new Color4(0.1f, 0.1f, 0.1f));
+        context.ClearRenderTargetView(renderTarget, new Color4(1.0f, 0.1f, 0.1f, 0.1f));
 
         // draw the triangle
         context.Draw(vertices.BufferSize, 0);

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SlimDX;
+using SlimDX.Direct3D11;
 
 namespace GSharp.Content
 {
-    public class ContentLoader
+    public static class ContentLoader
     {
-      public string contentPathFromBin { get; private set; }
-
-      public ContentLoader(string contentPathFromBin)
+      public static Texture2D GetTexture(Device device, string fileName)
       {
-
+        return Texture2D.FromFile(device, fileName);
       }
     }
 }

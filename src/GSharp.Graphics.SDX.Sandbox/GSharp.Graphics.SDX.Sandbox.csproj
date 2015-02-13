@@ -83,6 +83,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GSharp.Content\GSharp.Content.csproj">
+      <Project>{cc84853c-9245-474c-9f57-85bda43dd50e}</Project>
+      <Name>GSharp.Content</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GSharp.Graphics.SDX\GSharp.Graphics.SDX.csproj">
       <Project>{76edfde2-758a-4bc8-86f4-55db2b124758}</Project>
       <Name>GSharp.Graphics.SDX</Name>
