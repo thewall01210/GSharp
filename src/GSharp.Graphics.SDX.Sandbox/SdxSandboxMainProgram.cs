@@ -33,8 +33,6 @@ namespace GSharp.Graphics.SDX.Sandbox
 
       Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.None, description, out device, out swapChain);
 
-      // var squareTexture = ContentLoader.GetTexture(device, "box.bmp");
-
       // create a view of our render target, which is the back-buffer of the swap chain we just created
       RenderTargetView renderTarget;
       using (var resource = Resource.FromSwapChain<Texture2D>(swapChain, 0))
@@ -72,44 +70,23 @@ namespace GSharp.Graphics.SDX.Sandbox
       var pixelShader =
         ShaderHelper.CompileAndBuildPixelShader(device, pixelShaderLoader);
 
-      var cornFlowerBlue = new Vector3(0.3f, 0.5f, 0.7f); // <3 JP for life <3
+      var blueBox = ContentLoader.GetColoredBox(new Vector3(0.3f, 0.5f, 0.7f));
 
-      var model = new Model(
-        new[]
-          {
-            new Vector3(0.1f, 0.1f, 0.1f), new Vector3(-0.1f, -0.1f, 0.1f), new Vector3(-0.1f,  0.1f, 0.1f),
-            new Vector3(0.1f, 0.1f, 0.1f), new Vector3( 0.1f, -0.1f, 0.1f), new Vector3(-0.1f, -0.1f, 0.1f)
-          },
-          new[]
-          {
-            cornFlowerBlue, cornFlowerBlue, cornFlowerBlue,
-            cornFlowerBlue, cornFlowerBlue, cornFlowerBlue
-          }
-        );
-
-      // create the vertex layout and buffer
-      var elements = new []
-      {
-        new InputElement("POSITION", 0, Format.R32G32B32_Float, 0),
-        new InputElement("COLOR", 0, Format.R32G32B32_Float, Model.Vector3Size * model.Vertices.Length, 0)
-      };
-
-      var inputLayout = new InputLayout(device, inputSignature, elements);
+      var inputLayout = new InputLayout(device, inputSignature, blueBox.GetSharderInputElements());
 
       var vertexBuffer = new Buffer(
           device,
-          model.DataStream,
-          model.BufferSize,
+          blueBox.DataStream,
+          blueBox.BufferSize,
           ResourceUsage.Default,
           BindFlags.VertexBuffer,
           CpuAccessFlags.None,
           ResourceOptionFlags.None,
           0);
       
-
       var vertexBufferBindings = new VertexBufferBinding[]
       {
-        new VertexBufferBinding(vertexBuffer, Model.Vector3Size, 0)
+        new VertexBufferBinding(vertexBuffer, ColoredModel.VertexSize, 0)
       };
 
       // configure the Input Assembler portion of the pipeline with the vertex data
@@ -161,13 +138,13 @@ namespace GSharp.Graphics.SDX.Sandbox
         context.ClearRenderTargetView(renderTarget, new Color4(1.0f, 0.1f, 0.1f, 0.1f));
 
         // draw the triangle
-        context.Draw(model.BufferSize, 0);
+        context.Draw(blueBox.BufferSize, 0);
         swapChain.Present(0, PresentFlags.None);
       });
 
       // clean up all resources
       // anything we missed will show up in the debug output
-      model.Dispose();
+      blueBox.Dispose();
       vertexBuffer.Dispose();
       inputLayout.Dispose();
       inputSignature.Dispose();

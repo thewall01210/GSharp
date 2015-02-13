@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SlimDX;
 using SlimDX.Direct3D11;
+using GSharp.Graphics;
 
 namespace GSharp.Content
 {
@@ -13,6 +14,22 @@ namespace GSharp.Content
       public static Texture2D GetTexture(Device device, string fileName)
       {
         return Texture2D.FromFile(device, fileName);
+      }
+
+      public static ColoredModel GetColoredBox(Vector3 color)
+      {
+        return new ColoredModel(
+        new[]
+          {
+            new Vector3(0.1f, 0.1f, 0.1f), new Vector3(-0.1f, -0.1f, 0.1f), new Vector3(-0.1f,  0.1f, 0.1f),
+            new Vector3(0.1f, 0.1f, 0.1f), new Vector3( 0.1f, -0.1f, 0.1f), new Vector3(-0.1f, -0.1f, 0.1f)
+          },
+          new[]
+          {
+            color, color, color,
+            color, color, color
+          }
+        ); ;
       }
     }
 }

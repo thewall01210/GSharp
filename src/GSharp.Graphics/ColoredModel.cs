@@ -1,17 +1,19 @@
 ﻿using System;
 using SlimDX;
+using SlimDX.DXGI;
+using SlimDX.Direct3D11;
 
 namespace GSharp.Graphics
 {
-  public class Model : IDisposable
+  public class ColoredModel : IDisposable
   {
-    public static int Vector3Size = 12; // HAX!!! "sizeof(Vector3)" would need to be marked as unsafe
+    public static int VertexSize = 12; // HAX!!! "sizeof(Vector3)" would need to be marked as unsafe
 
-    public Model(Vector3[] vertices, Vector3[] colors)
+    public ColoredModel(Vector3[] vertices, Vector3[] colors)
     {
       Vertices = vertices;
       Colors = colors;
-      BufferSize = Vertices.Length * Vector3Size + Colors.Length * Vector3Size;
+      BufferSize = Vertices.Length * VertexSize + Colors.Length * VertexSize;
       DataStream = new DataStream(BufferSize, true, true);
 
       foreach (var vertex in Vertices)
@@ -34,6 +36,15 @@ namespace GSharp.Graphics
     public int BufferSize { get; private set; }
 
     public DataStream DataStream { get; private set; }
+
+    public InputElement[] GetSharderInputElements()
+    {
+      return new[]
+      {
+        new InputElement("POSITION", 0, Format.R32G32B32_Float, 0),
+        new InputElement("COLOR", 0, Format.R32G32B32_Float, ColoredModel.VertexSize * Vertices.Length, 0)
+      };
+    }
 
     public void Dispose()
     {

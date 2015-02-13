@@ -45,6 +45,12 @@
     <Compile Include="ContentLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GSharp.Graphics\GSharp.Graphics.csproj">
+      <Project>{95c3bb2c-2e42-484c-892e-4dcfb12952a6}</Project>
+      <Name>GSharp.Graphics</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
