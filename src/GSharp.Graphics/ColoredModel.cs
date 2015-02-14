@@ -9,11 +9,13 @@ namespace GSharp.Graphics
   {
     public static int VertexSize = 12; // HAX!!! "sizeof(Vector3)" would need to be marked as unsafe
 
-    public ColoredModel(Vector3[] vertices, Vector3[] colors)
+    public ColoredModel(Vector3[] vertices, Vector3[] colors, Vector3[] normals)
     {
       Vertices = vertices;
       Colors = colors;
-      BufferSize = Vertices.Length * VertexSize + Colors.Length * VertexSize;
+      Normals = normals;
+
+      BufferSize = VertexSize * (Vertices.Length + Colors.Length + Normals.Length);
       DataStream = new DataStream(BufferSize, true, true);
 
       foreach (var vertex in Vertices)
@@ -26,12 +28,19 @@ namespace GSharp.Graphics
         DataStream.Write<Vector3>(color);
       }
 
+      foreach (var normal in Normals)
+      {
+        DataStream.Write<Vector3>(normal);
+      }
+
       DataStream.Position = 0;
     }
 
     public Vector3[] Vertices { get; private set; }
 
     public Vector3[] Colors { get; private set; }
+
+    public Vector3[] Normals { get; private set; }
 
     public int BufferSize { get; private set; }
 
@@ -45,7 +54,9 @@ namespace GSharp.Graphics
       return new[]
       {
         new InputElement("POSITION", 0, Format.R32G32B32_Float, 0),
-        new InputElement("COLOR", 0, Format.R32G32B32_Float, colorOffset, 0)
+        new InputElement("COLOR", 0, Format.R32G32B32_Float, colorOffset, 0),
+        new InputElement("NORMAL", 0, Format.R32G32B32_Float, normalOffset, 0)
+
       };
     }
 

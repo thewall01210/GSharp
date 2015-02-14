@@ -51,7 +51,7 @@ namespace GSharp.Graphics.SDX.Sandbox
 
       var vertexShaderLoader =
         new ShaderFileLoader(
-          "Shaders/PassThrough.fx",
+          "Shaders/DirectionalShader.fx",
           "VShader",
           "vs_4_0",
           ShaderFlags.None,
@@ -59,7 +59,7 @@ namespace GSharp.Graphics.SDX.Sandbox
 
       var pixelShaderLoader =
         new ShaderFileLoader(
-          "Shaders/PassThrough.fx",
+          "Shaders/DirectionalShader.fx",
           "PShader",
           "ps_4_0",
           ShaderFlags.None,
