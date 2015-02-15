@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using System.Diagnostics;
 using GSharp.Content;
 using SlimDX;
 using SlimDX.D3DCompiler;
@@ -132,14 +133,34 @@ namespace GSharp.Graphics.SDX.Sandbox
         context.OutputMerger.SetTargets(renderTarget);
       };
 
+      var gameTimer = new Stopwatch();
+      var graphicsTimer = new Stopwatch();
+      var elapsedSec = 0.0f;
+      var frames = 0;
+      var fpsSecCounter = 0.0f;
       MessagePump.Run(form, () =>
       {
-        // clear the render target to grey
-        context.ClearRenderTargetView(renderTarget, new Color4(1.0f, 0.1f, 0.1f, 0.1f));
+        elapsedSec = 0.001f * (float)(gameTimer.ElapsedMilliseconds + graphicsTimer.ElapsedMilliseconds);
+        fpsSecCounter += elapsedSec;
+        if (fpsSecCounter > 2.0f)
+        {
+          fpsSecCounter -= 2.0f;
+          System.Diagnostics.Debug.WriteLine(frames);
+          frames = 0;
+        }
+        else
+          frames++;
 
-        // draw the triangle
+        gameTimer.Restart();
+        // Update(elapsedSec);
+
+        gameTimer.Stop();
+
+        graphicsTimer.Restart();
+        context.ClearRenderTargetView(renderTarget, new Color4(1.0f, 0.1f, 0.1f, 0.1f));
         context.Draw(blueBox.BufferSize, 0);
         swapChain.Present(0, PresentFlags.None);
+        graphicsTimer.Stop();
       });
 
       // clean up all resources

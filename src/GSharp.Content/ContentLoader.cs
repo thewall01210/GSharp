@@ -9,14 +9,21 @@ using GSharp.Graphics;
 
 namespace GSharp.Content
 {
-    public static class ContentLoader
-    {
-      public static Texture2D GetTexture(Device device, string fileName)
+  public class ContentLoader
+  {
+    public string Path { get; private set; }
+    
+    public ContentLoader(string path)
       {
-        return Texture2D.FromFile(device, fileName);
+        Path = path;
       }
 
-      public static ColoredModel GetColoredBox(Vector3 color)
+    public Texture2D GetTexture(Device device, string fileName)
+      {
+        return Texture2D.FromFile(device, Path + fileName);
+      }
+
+    public static ColoredModel GetColoredBox(Vector3 color)
       {
         return new ColoredModel(
         new[]
@@ -34,7 +41,7 @@ namespace GSharp.Content
             new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f),
             new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f)
           }
-        ); ;
+        );
       }
-    }
+  }
 }
