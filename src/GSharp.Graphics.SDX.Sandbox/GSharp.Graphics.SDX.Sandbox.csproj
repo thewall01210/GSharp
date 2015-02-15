@@ -95,6 +95,10 @@
       <Project>{95c3bb2c-2e42-484c-892e-4dcfb12952a6}</Project>
       <Name>GSharp.Graphics</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GSharp.Input\GSharp.Input.csproj">
+      <Project>{1e992a9b-1ed1-4d00-90a4-1ab7f0df5dfc}</Project>
+      <Name>GSharp.Input</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GSharp.Physics\GSharp.Physics.csproj">
       <Project>{b8d9da4d-7164-41eb-8084-b2c8b8503416}</Project>
       <Name>GSharp.Physics</Name>

@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GSharp.Events.Test", "..\te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GSharp.Content", "GSharp.Content\GSharp.Content.csproj", "{CC84853C-9245-474C-9F57-85BDA43DD50E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GSharp.Input", "GSharp.Input\GSharp.Input.csproj", "{1E992A9B-1ED1-4D00-90A4-1AB7F0DF5DFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{CC84853C-9245-474C-9F57-85BDA43DD50E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC84853C-9245-474C-9F57-85BDA43DD50E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC84853C-9245-474C-9F57-85BDA43DD50E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E992A9B-1ED1-4D00-90A4-1AB7F0DF5DFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E992A9B-1ED1-4D00-90A4-1AB7F0DF5DFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E992A9B-1ED1-4D00-90A4-1AB7F0DF5DFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E992A9B-1ED1-4D00-90A4-1AB7F0DF5DFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

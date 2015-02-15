@@ -13,14 +13,25 @@ namespace GSharp.Graphics.SDX.Sandbox
 {
   public sealed class SdxSandboxMainProgram : IMainProgram
   {
+    private Device device;
+    private SwapChain swapChain;
+    private RenderForm form;
+    private SwapChainDescription description;
+    private RenderTargetView renderTarget;
+    private DeviceContext context;
+    private Viewport viewport;
+
+    private Stopwatch gameTimer = new Stopwatch();
+    private Stopwatch graphicsTimer = new Stopwatch();
+    private float elapsedSec = 0.0f;
+    private int frames = 0;
+    private float fpsSecCounter = 0.0f;
+
     public void Run()
     {
-      Device device;
-      SwapChain swapChain;
+      form = new RenderForm("Sandbox");
 
-      var form = new RenderForm("Sandbox");
-
-      var description = new SwapChainDescription()
+      description = new SwapChainDescription()
       {
         BufferCount = 2,
         Usage = Usage.RenderTargetOutput,
@@ -35,15 +46,14 @@ namespace GSharp.Graphics.SDX.Sandbox
       Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.None, description, out device, out swapChain);
 
       // create a view of our render target, which is the back-buffer of the swap chain we just created
-      RenderTargetView renderTarget;
       using (var resource = Resource.FromSwapChain<Texture2D>(swapChain, 0))
       {
         renderTarget = new RenderTargetView(device, resource);
       }
 
       // setting a viewport is required if you want to actually see anything
-      var context = device.ImmediateContext;
-      var viewport = new Viewport(0.0f, 0.0f, form.ClientSize.Width, form.ClientSize.Height);
+      context = device.ImmediateContext;
+      viewport = new Viewport(0.0f, 0.0f, form.ClientSize.Width, form.ClientSize.Height);
       context.OutputMerger.SetTargets(renderTarget);
       context.Rasterizer.SetViewports(viewport);
 
@@ -106,6 +116,41 @@ namespace GSharp.Graphics.SDX.Sandbox
         factory.SetWindowAssociation(form.Handle, WindowAssociationFlags.IgnoreAltEnter);
       }
 
+      KeyBindings();
+
+      MessagePump.Run(form, () =>
+      {
+        // Loop start
+        elapsedSec = GetTotalElapsedSeconds();
+        gameTimer.Restart();
+        FrameCounter();
+
+        // Game Update
+        gameTimer.Restart();
+        UpdateGameLogic();
+        gameTimer.Stop();
+
+        // Loop end with graphics update
+        context.ClearRenderTargetView(renderTarget, new Color4(1.0f, 0.1f, 0.1f, 0.1f));
+        context.Draw(blueBox.BufferSize, 0);
+        swapChain.Present(0, PresentFlags.None);
+      });
+
+      // clean up all resources
+      // anything we missed will show up in the debug output
+      blueBox.Dispose();
+      vertexBuffer.Dispose();
+      inputLayout.Dispose();
+      inputSignature.Dispose();
+      vertexShader.Dispose();
+      pixelShader.Dispose();
+      renderTarget.Dispose();
+      swapChain.Dispose();
+      device.Dispose();
+    }
+
+    private void KeyBindings()
+    { // 
       form.KeyDown += (o, e) =>
       {
         // full screen
@@ -132,48 +177,34 @@ namespace GSharp.Graphics.SDX.Sandbox
 
         context.OutputMerger.SetTargets(renderTarget);
       };
+    }
 
-      var gameTimer = new Stopwatch();
-      var graphicsTimer = new Stopwatch();
-      var elapsedSec = 0.0f;
-      var frames = 0;
-      var fpsSecCounter = 0.0f;
-      MessagePump.Run(form, () =>
+    private void UpdateGameLogic()
+    {
+
+
+      for (var i = 0; i < 2000000; i++ )
       {
-        elapsedSec = 0.001f * (float)(gameTimer.ElapsedMilliseconds + graphicsTimer.ElapsedMilliseconds);
-        fpsSecCounter += elapsedSec;
-        if (fpsSecCounter > 2.0f)
-        {
-          fpsSecCounter -= 2.0f;
-          System.Diagnostics.Debug.WriteLine(frames);
-          frames = 0;
-        }
-        else
-          frames++;
+        var speedUpLoop = 1.0 / 3.0 / 5.0 / 7.0;
+        speedUpLoop /= speedUpLoop;
+      }
+    }
 
-        gameTimer.Restart();
-        // Update(elapsedSec);
+    private void FrameCounter()
+    {
+      fpsSecCounter += elapsedSec;
+      if (fpsSecCounter > 1.0f)
+      {
+        fpsSecCounter -= 1.0f;
+        System.Diagnostics.Debug.WriteLine(frames);
+        frames = 0;
+      }
+      frames++;
+    }
 
-        gameTimer.Stop();
-
-        graphicsTimer.Restart();
-        context.ClearRenderTargetView(renderTarget, new Color4(1.0f, 0.1f, 0.1f, 0.1f));
-        context.Draw(blueBox.BufferSize, 0);
-        swapChain.Present(0, PresentFlags.None);
-        graphicsTimer.Stop();
-      });
-
-      // clean up all resources
-      // anything we missed will show up in the debug output
-      blueBox.Dispose();
-      vertexBuffer.Dispose();
-      inputLayout.Dispose();
-      inputSignature.Dispose();
-      vertexShader.Dispose();
-      pixelShader.Dispose();
-      renderTarget.Dispose();
-      swapChain.Dispose();
-      device.Dispose();
+    private float GetTotalElapsedSeconds()
+    {
+      return 0.001f * gameTimer.ElapsedMilliseconds;
     }
   }
 }
